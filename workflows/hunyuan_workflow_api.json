@@ -1,0 +1,51 @@
+{
+    "10": {
+        "class_type": "LoadImage",
+        "inputs": {
+            "image": "example.png"
+        }
+    },
+    "12": {
+        "class_type": "CLIPTextEncode",
+        "inputs": {
+            "text": "camera zoom",
+            "clip": [
+                "1",
+                0
+            ]
+        }
+    },
+    "15": {
+        "class_type": "HunyuanVideoSampler",
+        "inputs": {
+            "model": [
+                "20",
+                0
+            ],
+            "positive": [
+                "12",
+                0
+            ],
+            "image": [
+                "10",
+                0
+            ]
+        }
+    },
+    "20": {
+        "class_type": "CheckpointLoaderSimple",
+        "inputs": {
+            "ckpt_name": "hunyuan_video.safetensors"
+        }
+    },
+    "25": {
+        "class_type": "SaveVideo",
+        "inputs": {
+            "filename_prefix": "hunyuan",
+            "images": [
+                "15",
+                0
+            ]
+        }
+    }
+}

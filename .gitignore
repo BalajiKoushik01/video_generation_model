@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Large Asset Files (Download via setup scripts)
+assets/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.mp3
+*.wav
+*.m4a
+*.jpg
+*.jpeg
+*.png
+*.webp
+
+# ComfyUI Installation (Install via setup_comfyui.bat)
+ComfyUI/
+
+# Output Files
+output/
+*.tmp
+*TEMP*
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment Variables & Secrets
+.env
+.env.local
+config_local.py
+*.key
+
+# Logs
+*.log
+logs/
+
+# Temporary Files
+temp-*
+*.bak

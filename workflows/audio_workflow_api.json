@@ -1,0 +1,38 @@
+{
+    "10": {
+        "class_type": "CLIPTextEncode",
+        "inputs": {
+            "text": "cinematic music"
+        }
+    },
+    "11": {
+        "class_type": "MusicGenSampler",
+        "inputs": {
+            "model": [
+                "20",
+                0
+            ],
+            "text": [
+                "10",
+                0
+            ],
+            "duration": 10
+        }
+    },
+    "20": {
+        "class_type": "CheckpointLoaderSimple",
+        "inputs": {
+            "ckpt_name": "musicgen_small.safetensors"
+        }
+    },
+    "25": {
+        "class_type": "SaveAudio",
+        "inputs": {
+            "filename_prefix": "score",
+            "audio": [
+                "11",
+                0
+            ]
+        }
+    }
+}

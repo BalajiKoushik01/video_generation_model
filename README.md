@@ -29,8 +29,8 @@ An advanced AI-powered video production system that orchestrates multiple specia
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BalajiKoushik01/AI_video-generation.git
-   cd AI_video-generation
+   git clone https://github.com/BalajiKoushik01/video_generation_model.git
+   cd video_generation_model
    ```
 
 2. **Create virtual environment**

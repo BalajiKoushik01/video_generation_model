@@ -1,0 +1,23 @@
+name: Python syntax check
+on:
+  pull_request:
+  push:
+    branches: ["fix/**"]
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m compileall -q .
+      - name: Verify portable output locations
+        run: |
+          python - <<'PY'
+          import config
+          from pathlib import Path
+          assert Path(config.OUTPUT_DIR).is_absolute()
+          assert Path(config.ASSETS_DIR).is_absolute()
+          print("Portable paths configured")
+          PY

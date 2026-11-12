@@ -134,51 +134,52 @@ class HollywoodStudio:
         print("\n🎨 [COMMUNICATION] Cinematographer -> Art Dept / Librarian: 'Sourcing visuals based on new specs...'")
         assets = []
         if script and 'scenes' in script:
-            for i, scene in enumerate(script['scenes']):
-                source = scene.get('source_type', 'GENERATE')
-                # ...
-                
-                # Bundle asset with its specific voiceover
-                if asset_path:
-                    asset_data = {
-                        'path': asset_path,
-                        'duration': scene.get('duration', 5),
-                        'text_overlay': scene.get('text_overlay', ''),
-                        'voiceover_path': scene.get('voiceover_path') # Pass precise audio
-                    }
-                    assets.append(asset_data) # Check editor usage!
-                    
-                    # Log
-                    ext = os.path.splitext(asset_path)[1].lower()
-                    if ext in ['.jpg', '.jpeg', '.png', '.webp']:
-                         print(f"      📷 Asset Type: IMAGE")
-                    else:
-                         print(f"      🎥 Asset Type: VIDEO")
-                
-                # Fallback to generation if Stock failed or if source is GENERATE
-                if not asset_path:
+            for index, scene in enumerate(script['scenes']):
+                source = str(scene.get("source_type", "GENERATE")).upper()
+                asset_path = None
+                was_generated = False
+
+                try:
                     if source == "STOCK":
-                        print("      ⚠️ All stock sources exhausted, switching to AI Generation.")
-                    asset_path = self.art_dept.generate_keyframe(scene)
-                    
-                    # If AI generation also fails (ComfyUI offline), try STOCK as last resort
-                    if not asset_path and source == "GENERATE":
-                        print("      ⚠️ AI Generation unavailable. Attempting STOCK fallback...")
                         asset_path = self.librarian.get_best_match(scene)
-                
-                if asset_path:
-                    # New bundling logic handled above
-                    print(f"      ✅ Acquired: {os.path.basename(asset_path)}")
-                    print(f"      ✅ Asset Secured: {os.path.basename(asset_path)}")
-                    
-                    # Step 3: Production (Motion) - Only if Generated
-                    if source == "GENERATE":
-                        print(f"      🎥 Rolling Camera on Scene {i+1}...")
-                        # We pass the asset path (keyframe) to the Director
+                    else:
+                        asset_path = self.art_dept.generate_keyframe(scene)
+                        was_generated = bool(asset_path)
+
+                    if not asset_path:
+                        # Try the other source. Never append a missing asset.
+                        if source == "STOCK":
+                            asset_path = self.art_dept.generate_keyframe(scene)
+                            was_generated = bool(asset_path)
+                        else:
+                            asset_path = self.librarian.get_best_match(scene)
+                            was_generated = False
+
+                    if not asset_path:
+                        print(f"      No usable asset for scene {index + 1}; skipping")
+                        continue
+
+                    if was_generated:
                         video_path = self.production.shoot_scene(scene, asset_path)
-                        # Update asset path to the video (or keep image if failed)
-                        assets[-1]['path'] = video_path
-                        assets[-1]['type'] = "GENERATE_VIDEO"
+                        if video_path:
+                            asset_path = video_path
+
+                    assets.append({
+                        "path": asset_path,
+                        "duration": scene.get("duration", 5),
+                        "text_overlay": scene.get("text_overlay", ""),
+                        "voiceover_path": scene.get("voiceover_path"),
+                        "type": "GENERATED" if was_generated else "STOCK",
+                    })
+                    print(f"      Acquired: {os.path.basename(asset_path)}")
+                except Exception as exc:
+                    print(f"      Scene {index + 1} asset processing failed: {exc}")
+
+        if not assets:
+            raise RuntimeError(
+                "No usable scene assets were created; check stock provider "
+                "credentials, model availability and input prompts."
+            )
 
         # Step 3.5: Sound Department - CRITICAL AUDIO FIX
         print("🎵 Step 3.5: Composing Original Score...")

@@ -2,11 +2,13 @@
 Configuration for Hollywood Studio - Enhanced with Multiple AI API Support
 """
 import os
+from pathlib import Path
 
 # ========== PATHS ==========
-OUTPUT_DIR = "C:\\Users\\balaj\\Desktop\\AI\\Hollywood_Studio\\output"
-ASSETS_DIR = "C:\\Users\\balaj\\Desktop\\AI\\Hollywood_Studio\\assets"
-WORKFLOWS_DIR = "C:\\Users\\balaj\\Desktop\\AI\\Hollywood_Studio\\workflows"
+PROJECT_ROOT = Path(__file__).resolve().parent
+OUTPUT_DIR = os.getenv("HOLLYWOOD_OUTPUT_DIR", str(PROJECT_ROOT / "output"))
+ASSETS_DIR = os.getenv("HOLLYWOOD_ASSETS_DIR", str(PROJECT_ROOT / "assets"))
+WORKFLOWS_DIR = os.getenv("HOLLYWOOD_WORKFLOWS_DIR", str(PROJECT_ROOT / "workflows"))
 
 # ========== VIDEO SETTINGS ==========
 RESOLUTION = (1920, 1080)  # 1080p

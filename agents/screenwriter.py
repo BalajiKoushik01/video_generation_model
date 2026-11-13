@@ -1,11 +1,5 @@
-import os
 import json
-import requests
-import urllib3
 from config import GROQ_API_KEY, LLM_MODEL
-
-# Disable SSL warnings
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class ScreenwriterAgent:
     def __init__(self):

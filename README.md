@@ -43,7 +43,7 @@ Verify usage rights for footage, music, generated images and voice assets. Do no
 
 ## Known maintenance work
 
-- Replace local path defaults in `config.py` with configurable project-relative paths.
+- Check provider, model, FFmpeg and ComfyUI availability and document a reproducible fully rendered example.
 - Test each provider and fallback separately.
 - Add reproducible integration tests and a dependency lock strategy.
 - Keep experimental quality modes separate from observed output quality.
